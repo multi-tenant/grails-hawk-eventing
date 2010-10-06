@@ -51,12 +51,14 @@ class EventingGrailsPlugin {
 	
 	void addSubscriptionsFromGroovyFiles(EventBroker broker, GrailsApplication application) {
 		def cfgClosure = getConfigClosureFromClass("events", application)
-		def configuration = ConsumerBuilder.fromClosure(cfgClosure)
-		broker.addSubscriptionsFromConfiguration(configuration)
+        if (cfgClosure) {
+    		def configuration = ConsumerBuilder.fromClosure(cfgClosure)
+            broker.addSubscriptionsFromConfiguration(configuration)
+        }
 	}
 	
 	Closure getConfigClosureFromClass(String configClassName, GrailsApplication application) {
-		Closure configClosure
+		Closure configClosure = null
 		
 		try {
 			Class configClass = ClassUtils.forName(configClassName, application.classLoader);
@@ -74,7 +76,7 @@ class EventingGrailsPlugin {
 			throw new InvalidEventConfigurationException(msg, ex)
 		}
 	
-		return configClosure ?: { }
+		return configClosure
 	}
 	
     def doWithWebDescriptor = { xml -> }
