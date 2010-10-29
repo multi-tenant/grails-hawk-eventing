@@ -23,6 +23,11 @@ class EventBroker {
 		} 
 	}
 	
+	public void subscribe(String fullEventName, Closure eventClosure) {
+		ClosureEventConsumer eventConsumer = new ClosureEventConsumer(null, eventClosure);
+		subscribe fullEventName, eventConsumer	
+	}
+	
 	public void subscribe(String fullEventName, EventConsumer eventConsumer) {
 		if (!eventConsumerMap.containsKey(fullEventName)) 
 			eventConsumerMap[fullEventName] = new LinkedHashSet<EventConsumer>()
