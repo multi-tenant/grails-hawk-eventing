@@ -11,10 +11,10 @@ import org.codehaus.groovy.grails.commons.spring.GrailsApplicationContext
 import org.codehaus.groovy.grails.plugins.DefaultGrailsPluginManager
 import org.codehaus.groovy.grails.plugins.GrailsPlugin
 
-class EventingGrailsPlugin {
+class HawkEventingGrailsPlugin {
 
-    def groupId = "plugins.util"	
-    def version = "0.1"
+    def groupId = "plugins.utilities"	
+    def version = "0.2"
 
     def grailsVersion = "1.3.0 > *"
     def dependsOn = [:]
