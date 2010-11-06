@@ -1,6 +1,6 @@
 package grails.plugin.eventing
 
-import grails.plugin.eventing.exceptions.InvalidEventConfigurationException
+import grails.plugin.eventing.exceptions.InvalidEventConfigurationException;
 
 /**
  * See tests for usage.
@@ -9,25 +9,26 @@ import grails.plugin.eventing.exceptions.InvalidEventConfigurationException
  * 
  * @author Kim A. Betti <kim.betti@gmail.com>
  */
-class ConsumerBuilder implements EventConsumerConfiguration {
+class ClosureSubscriptionFactory implements EventConsumerConfiguration {
 	
 	protected Closure configurationClosure
 	protected Object closureArgument
-	protected Map<String, EventConsumer> consumers = [:]
+	protected Set<EventSubscription> subscriptions = []
 	protected List currentEventHierarchi = []
 	 
-	protected ConsumerBuilder(Closure configurationClosure, Object ctx) {
+	protected ClosureSubscriptionFactory(Closure configurationClosure, Object ctx) {
 		this.configurationClosure = configurationClosure
 		this.closureArgument = ctx
 	}
 	
-	public static ConsumerBuilder fromClosure(Closure configurationClosure, Object ctx = null) {
-		return new ConsumerBuilder(configurationClosure, ctx)
+	public static ClosureSubscriptionFactory fromClosure(Closure configurationClosure, Object ctx = null) {
+		return new ClosureSubscriptionFactory(configurationClosure, ctx)
 	}
 	
-	public Map<String, List<EventConsumer>> getConsumers() {
+	@Override
+	public Set<EventSubscription> getSubscriptions() {
 		invokeConfgurationClosure()
-		return this.consumers
+		return this.subscriptions
 	}
 	
 	private void invokeConfgurationClosure(Closure cfgClosure) {
@@ -42,7 +43,7 @@ class ConsumerBuilder implements EventConsumerConfiguration {
 	
 	private String getFullEventName(String lastName) {
 		currentEventHierarchi << lastName
-		String fullName = currentEventHierarchi.join(EventBroker.EVENT_SEPARATOR)
+		String fullName = currentEventHierarchi.join('.')
 		currentEventHierarchi.clear()
 		return fullName
 	}
@@ -50,18 +51,11 @@ class ConsumerBuilder implements EventConsumerConfiguration {
 	private void addEventConsumer(String fullEventName, Object[] arguments) {
 		hasAtLeastOneArgument(arguments)
 		Closure eventHandler = getEventHandler(arguments)
-		String consumerName = getConsumerName(arguments)
-		EventConsumer eventConsumer = new ClosureEventConsumer(consumerName, eventHandler)
-		addEventConsumerToMap(fullEventName, eventConsumer)
+		String consumerName = getConsumerName(arguments) 
+		EventConsumer eventConsumer = new ClosureEventConsumer(eventHandler, consumerName)
+		subscriptions << new EventSubscription(fullEventName, eventConsumer)
 	}
-	
-	private void addEventConsumerToMap(String fullEventName, EventConsumer eventConsumer) {
-		if (!consumers.containsKey(fullEventName))
-			consumers[fullEventName] = []
 		
-		consumers[fullEventName] << eventConsumer
-	}
-	
 	private void hasAtLeastOneArgument(Object[] arguments) {
 		if (arguments.length == 0) {
 			String msg = "No arguments supplied for event $eventName, expected (at least) a closure"

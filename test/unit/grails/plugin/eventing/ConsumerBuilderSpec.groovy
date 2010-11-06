@@ -11,76 +11,86 @@ class ConsumerBuilderSpec extends UnitSpec {
 	
 	def "Single event definition"() {
 		when:
-		Map evtConsumerMap = ConsumerBuilder.fromClosure {
+		Set subscriptions = ClosureSubscriptionFactory.fromClosure {
 			hibernate.book.delete { book -> }
-		}.consumers
+		}.getSubscriptions()
 		
 		then: "Found one consumer with the expected name"
-		evtConsumerMap.size() == 1
-		evtConsumerMap.containsKey "hibernate.book.delete"
+		println " --> " + subscriptions
+		subscriptions.size() == 1
+		shouldSubscribeTo(subscriptions, [ "hibernate.book.delete" ])
 	}
 	
 	def "Multiple listeners for single event"() {
 		when:
-		Map evtConsumerMap = ConsumerBuilder.fromClosure {
+		Set subscriptions = ClosureSubscriptionFactory.fromClosure {
 			hibernate.book.delete { book -> }
 			hibernate.book.delete { book -> }
-		}.consumers
+		}.getSubscriptions()
 		
 		then: "Found one consumer with the expected name"
-		evtConsumerMap.size() == 1
-		evtConsumerMap.containsKey "hibernate.book.delete"
-		evtConsumerMap.get("hibernate.book.delete").size() == 2
+		subscriptions.size() == 2
+		shouldSubscribeTo(subscriptions, [ "hibernate.book.delete" ])
 	}
 
 	def "Multiple event definitions for different events"() {
 		when:
-		Map evtConsumerMap = ConsumerBuilder.fromClosure {
+		Set subscriptions = ClosureSubscriptionFactory.fromClosure {
 			hibernate.book.delete { book -> }
 			hibernate.sessionCreated { session -> }
 			customEvent {  }
-		}.consumers
+		}.getSubscriptions()
 		
 		then: "Three consumers are added"
-		evtConsumerMap.size() == 3
+		subscriptions.size() == 3
 		
 		and: "With the correct event names"
-		evtConsumerMap.containsKey "hibernate.book.delete"
-		evtConsumerMap.containsKey "hibernate.sessionCreated"
-		evtConsumerMap.containsKey "customEvent"
+		shouldSubscribeTo(subscriptions, [ "hibernate.book.delete", "hibernate.sessionCreated", "customEvent" ])
 	}
 	
 	def "Event definition with name"() {
 		when:
-		Map evtConsumerMap = ConsumerBuilder.fromClosure {
+		Set subscriptions = ClosureSubscriptionFactory.fromClosure {
 			hibernate.book.delete "remove-from-library", { book -> }
-		}.consumers
+		}.getSubscriptions()
 		
 		then: "The consumers has the expected names"
-		evtConsumerMap.containsKey "hibernate.book.delete"
-		evtConsumerMap.get("hibernate.book.delete").get(0).name == "remove-from-library"
+		subscriptions.toList().get(0).consumer.consumerName == "remove-from-library"
 	}
 	
 	def "Event definitions without name are named anonymous"() {
 		when:
-		Map evtConsumerMap = ConsumerBuilder.fromClosure {
+		Set subscriptions = ClosureSubscriptionFactory.fromClosure {
 			hibernate.book.delete { book -> }
-		}.consumers
+		}.getSubscriptions()
 		
 		then: "The consumer is named anonymous"
-		evtConsumerMap.containsKey "hibernate.book.delete"
-		println "Event consumer:"  + evtConsumerMap.get("hibernate.book.delete").get(0).getClass().name
-		evtConsumerMap.get("hibernate.book.delete").get(0).name == "anonymous"
+		shouldSubscribeTo(subscriptions, [ "hibernate.book.delete" ])
+		subscriptions.toList().get(0).consumer.consumerName == "anonymous"
 	}
 	
 	def "Empty name triggers exception"() {
 		when:
-		Map evtConsumerMap = ConsumerBuilder.fromClosure {
+		Set subscriptions = ClosureSubscriptionFactory.fromClosure {
 			hibernate.book.delete "", { book -> }
-		}.consumers
+		}.getSubscriptions()
 		
 		then: "An exception is thrown"
 		thrown(InvalidEventConfigurationException)
+	}
+	
+	private void shouldSubscribeTo(Set subscriptions, List eventNames) {
+		for (String eventName : eventNames) {
+			boolean found = false
+			for (EventSubscription subscription : subscriptions) {
+				if (subscription.eventName == eventName) {
+					found = true
+					break
+				}
+			}
+			
+			assert found, "Expected a subscription to " + eventName
+		}
 	}
 	
 }

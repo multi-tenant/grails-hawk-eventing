@@ -1,10 +1,13 @@
 package grails.plugin.eventing;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
+/**
+ * 
+ * @author Kim A. Betti
+ */
 public interface EventConsumerConfiguration {
 
-	Map<String, List<EventConsumer>> getConsumers();
+	 Set<EventSubscription> getSubscriptions();
 	
 }

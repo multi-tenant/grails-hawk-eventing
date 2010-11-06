@@ -1,6 +1,7 @@
 import groovy.lang.Script
 
 import grails.plugin.eventing.*
+import grails.plugin.eventing.config.*
 import grails.plugin.eventing.exceptions.*
 
 import org.springframework.context.ApplicationContext
@@ -20,11 +21,12 @@ class HawkEventingGrailsPlugin {
     def dependsOn = [:]
 
     def pluginExcludes = [
-		"grails-app/views/error.gsp"
+		"grails-app/views/error.gsp",
+		"grails-app/conf/events.groovy"
     ]
 
-    def author = "Multi Tenant Interest Group"
-    def authorEmail = "..."
+    def author = "Kim A. Betti"
+    def authorEmail = "kim@developer-b.com"
 	
     def title = "Eventing"
 	def documentation = "http://grails.org/plugin/eventing"
@@ -32,6 +34,10 @@ class HawkEventingGrailsPlugin {
     
     def doWithSpring = {
 		eventBroker(EventBroker)
+		
+		eventScriptReader(ScriptConfigurationReader) {
+			eventBroker = ref("eventBroker")
+		}
     }
 	
 	def doWithDynamicMethods = { ctx -> 
@@ -50,37 +56,7 @@ class HawkEventingGrailsPlugin {
 			}
 		}
 	}
-	
-	void addSubscriptionsFromGroovyFiles(EventBroker broker, GrailsApplication application) {
-		def cfgClosure = getConfigClosureFromClass("events", application)
-        if (cfgClosure) {
-    		def configuration = ConsumerBuilder.fromClosure(cfgClosure)
-            broker.addSubscriptionsFromConfiguration(configuration)
-        }
-	}
-	
-	Closure getConfigClosureFromClass(String configClassName, GrailsApplication application) {
-		Closure configClosure = null
-		
-		try {
-			Class configClass = ClassUtils.forName(configClassName, application.classLoader);
-			Script script = (Script) configClass.newInstance()
-			script.run()
-			configClosure = script.getProperty("consumers")
-		} catch (MissingPropertyException ex) {
-			String msg = "Expected to find a 'consumers' property in events.groovy"
-			throw new InvalidEventConfigurationException(msg)
-		} catch (ClassNotFoundException ex) {
-			// No big deal, it just means that the
-			// application doesn't contain a events.groovy.
-		} catch (Exception ex) {
-			String msg = "Unable to read configuration from events.groovy, " + ex.message
-			throw new InvalidEventConfigurationException(msg, ex)
-		}
-	
-		return configClosure
-	}
-	
+
     def doWithWebDescriptor = { xml -> }
 	def doWithApplicationContext = { applicationContext -> }
 	
