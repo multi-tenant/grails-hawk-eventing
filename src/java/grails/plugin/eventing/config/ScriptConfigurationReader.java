@@ -10,7 +10,6 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.InitializingBean;
 
 /**
  * Reads configuration from a groovy script. 
@@ -24,10 +23,7 @@ class ScriptConfigurationReader {
 	public final String CONFIG_CLOSURE_PROPERTY_NAME = "consumers";
 	
 	private static final Log log = LogFactory.getLog(ScriptConfigurationReader.class);
-	
-	private EventBroker eventBroker;
 
-	
 	public void setEventBroker(EventBroker eventBroker) {
 		try {
 			Class<?> configClass = getConfigClass();
@@ -73,7 +69,7 @@ class ScriptConfigurationReader {
 		String message = "Exception when reading consumers from "
 						+ CONFIG_SCRIPT_NAME + ".groovy: " + ex.getMessage();
 		
-		throw new InvalidEventConfigurationException(message);
+		throw new InvalidEventConfigurationException(message, ex);
 	}
 	
 }
