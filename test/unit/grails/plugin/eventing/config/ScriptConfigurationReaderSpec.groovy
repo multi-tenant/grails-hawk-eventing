@@ -18,7 +18,7 @@ class ScriptConfigurationReaderSpec extends UnitSpec {
 			def consumerConfig = reader.setEventBroker(broker)
 			
 		then:
-		2 * broker.subscribe(_ as EventSubscription)
+		1 * broker.subscribe(_ as Set)
 	}
 	
 }

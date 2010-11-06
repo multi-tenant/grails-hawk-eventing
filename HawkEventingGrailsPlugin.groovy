@@ -15,7 +15,7 @@ import org.codehaus.groovy.grails.plugins.GrailsPlugin
 class HawkEventingGrailsPlugin {
 
     def groupId = "plugins.utilities"	
-    def version = "0.2"
+    def version = "0.3"
 
     def grailsVersion = "1.3.0 > *"
     def dependsOn = [:]
@@ -33,34 +33,30 @@ class HawkEventingGrailsPlugin {
 	def description = 'Event plugin similar to the Falcone-Util plugin, but without the Hibernate integration.'
     
     def doWithSpring = {
+		
+		// Subscription and publishing
 		eventBroker(EventBroker)
 		
-		eventScriptReader(ScriptConfigurationReader) {
+		// Reads subscriptions from events.groovy
+		eventScriptConfigReader(ScriptConfigurationReader) {
 			eventBroker = ref("eventBroker")
 		}
+		
+		// Reads subscriptions from other plugins
+		otherPluginConfigReader(OtherPluginsConfigurationReader) {
+			eventBroker = ref("eventBroker")
+			pluginManager = ref("pluginManager")
+			grailsApplication = ref("grailsApplication")
+		}
+		
     }
 	
-	def doWithDynamicMethods = { ctx -> 
-		def eventBroker = ctx.getBean("eventBroker")
-		addSubscriptionsFromOtherPlugins(eventBroker, manager, application)
-		addSubscriptionsFromGroovyFiles(eventBroker, application)
-	}
-	
-	void addSubscriptionsFromOtherPlugins(EventBroker broker, DefaultGrailsPluginManager pluginManager, GrailsApplication application) {
-		pluginManager.allPlugins.each { GrailsPlugin plugin ->
-			def pluginPropeties = plugin.instance.properties
-			if (pluginPropeties.containsKey("doWithEvents")) {
-				def cfgClosure = pluginPropeties.get("doWithEvents")
-				def cfg = ConsumerBuilder.fromClosure(cfgClosure, application)
-				broker.addSubscriptionsFromConfiguration(cfg)
-			}
-		}
-	}
-
     def doWithWebDescriptor = { xml -> }
 	def doWithApplicationContext = { applicationContext -> }
 	
 	def onChange = { event -> }
 	def onConfigChange = { event -> }
+	
+	def doWithDynamicMethods = { ctx -> }
 	
 }

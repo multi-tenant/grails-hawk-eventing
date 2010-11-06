@@ -1,5 +1,7 @@
 package grails.plugin.eventing;
 
+import groovy.lang.Closure;
+
 import java.util.*;
 
 /**
@@ -11,10 +13,24 @@ public class EventBroker {
 	private Map<String, Set<EventConsumer>> eventConsumers
 		= Collections.synchronizedMap(new HashMap<String, Set<EventConsumer>>());
 
+	public void subscribe(Set<EventSubscription> subscriptions) {
+		for (EventSubscription subscription : subscriptions) 
+			subscribe(subscription);
+	}
+	
+	public void subscribe(String eventName, Closure eventClosure) {
+		ClosureEventConsumer consumer = new ClosureEventConsumer(eventClosure);
+		subscribe(eventName, consumer);
+	}
+	
 	public void subscribe(EventSubscription subscription) {
 		String eventName = subscription.getEventName();
+		subscribe(eventName, subscription.getConsumer());
+	}
+	
+	public void subscribe(String eventName, EventConsumer consumer) {
 		ensureKeyFor(eventName);
-		eventConsumers.get(eventName).add(subscription.getConsumer());
+		eventConsumers.get(eventName).add(consumer);
 	}
 	
 	private void ensureKeyFor(String eventName) {
@@ -37,10 +53,8 @@ public class EventBroker {
 		EventNameDecoder eventNameDecoder = new EventNameDecoder(fullEventName);
 		while (eventNameDecoder.hasNext()) {
 			String currentEventName = eventNameDecoder.next();
-			System.out.println("Current event name: " + currentEventName);
 			Set<EventConsumer> consumers = getEventConsumers(currentEventName);
 			for (EventConsumer consumer : consumers) {
-				System.out.println(currentEventName + " to " + consumer);
 				consumer.consume(event);
 			} 
 		}
