@@ -49,6 +49,11 @@ class HawkEventingGrailsPlugin {
 			grailsApplication = ref("grailsApplication")
 		}
 		
+		// Get consumers from annotated Spring beans
+		springBeanAnnotationConfigReader(SpringBeanAnnotationConfigurationReader) {
+			eventBroker = ref("eventBroker")
+		}
+		
     }
 	
     def doWithWebDescriptor = { xml -> }
