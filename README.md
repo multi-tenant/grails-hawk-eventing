@@ -20,7 +20,7 @@ Subscribing to events
 		void afterPropertiesSet() {
 			
 			eventBroker.subscribe("hibernate.book") { Event event ->
-				// Do something with book
+				// Do something with book (event.payload)
 			}
 			
 		}
@@ -32,8 +32,8 @@ Subscribing to events
 
 	consumers = {
 	
-		hibernate.book.created { Book book -> 
-			// Do something with book
+		hibernate.book.created { Event event -> 
+			// Do something with book (event.payload)
 		}
 		
 	}
@@ -42,8 +42,8 @@ Subscribing to events
 
 	def doWithEvents = { ApplicationContext ctx ->
 	
-		hibernate.book.created { Book book -> 
-			// Do something with book
+		hibernate.book.created { Event event -> 
+			// Do something with event.payload
 		}
 		
 	}
@@ -86,6 +86,11 @@ Events published to `hibernate.book.created` will also be published to `hibernat
 Changelog
 ----------
 
+### v0.4 - November the 28th. 2010
+
+ * Started working (not completed) on support for async event publishing if the [Grails Executor](http://grails.org/plugin/executor) plugin is installed (no compile time dependency).
+ * Breaking: Refactored package structure to reflect the new name
+
 ### v0.3 - November the 6th. 2010
 
 * Feature: Support for declaring methods as event consumers using a @Consuming annotation.
@@ -101,5 +106,4 @@ Consumers in need of the broker should have it injected by Spring.
 Roadmap
 --------
 
-* Support for async events using the [Grails Executor](http://grails.org/plugin/executor) plugin?
-* More testing and a few code refactorings. 
+The plugin is pretty much feature ready, but more tests, examples and documentation would be nice. 

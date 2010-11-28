@@ -14,7 +14,7 @@ import org.codehaus.groovy.grails.plugins.GrailsPlugin
 
 class HawkEventingGrailsPlugin {
 
-    def version = "0.3"
+    def version = "0.4"
 
     def grailsVersion = "1.3.0 > *"
     def dependsOn = [:]

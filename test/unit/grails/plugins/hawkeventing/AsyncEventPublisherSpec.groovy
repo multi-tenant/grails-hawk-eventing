@@ -1,10 +1,10 @@
 package grails.plugins.hawkeventing
 
-import grails.plugins.hawkeventing.BaseEvent;
-import grails.plugins.hawkeventing.exceptions.EventException;
-import grails.plugin.spock.IntegrationSpec;
+import grails.plugin.spock.UnitSpec
+import grails.plugins.hawkeventing.BaseEvent
+import grails.plugins.hawkeventing.exceptions.EventException
 
-class AsyncEventPublisherSpec extends IntegrationSpec {
+class AsyncEventPublisherSpec extends UnitSpec {
 	
 	def syncEvent = new BaseEvent("hibernate.newSession", null, false)
 	def publisher = new AsyncEventPublisher()
@@ -19,5 +19,5 @@ class AsyncEventPublisherSpec extends IntegrationSpec {
 		when: publisher.publish syncEvent, null
 		then: thrown(EventException)
 	}
-	
+		
 }

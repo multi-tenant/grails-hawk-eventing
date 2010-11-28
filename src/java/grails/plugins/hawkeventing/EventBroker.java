@@ -64,8 +64,10 @@ public class EventBroker {
 		while (eventNameDecoder.hasNext()) {
 			String currentEventName = eventNameDecoder.next();
 			Set<EventConsumer> consumers = getEventConsumers(currentEventName);
-			for (EventConsumer consumer : consumers)
-				publisher.publish(event, consumer);
+			for (EventConsumer consumer : consumers) {
+				Future<?> future = publisher.publish(event, consumer);
+				futures.add(future);
+			}
 		}
 		
 		return futures;
