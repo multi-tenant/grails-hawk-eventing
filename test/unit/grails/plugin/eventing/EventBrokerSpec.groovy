@@ -12,8 +12,9 @@ class EventBrokerSpec extends UnitSpec {
 	
 	def setup() {
 		broker = new EventBroker()
+		broker.syncEventPublisher = new SyncEventPublisher()
 	}
-		
+
 	def "unsubscribe"() {
 		when: "We add a new subscription"
 			broker.subscribe(new EventSubscription("book.created", new NullConsumer()))

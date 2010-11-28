@@ -1,8 +1,8 @@
 package grails.plugin.eventing;
 
 import groovy.lang.Closure;
-
 import java.util.*;
+import java.util.concurrent.Future;
 
 /**
  * 
@@ -12,6 +12,8 @@ public class EventBroker {
 
 	private Map<String, Set<EventConsumer>> eventConsumers
 		= Collections.synchronizedMap(new HashMap<String, Set<EventConsumer>>());
+	
+	private EventPublisher syncPublisher, asyncPublisher;
 
 	public void subscribe(Set<EventSubscription> subscriptions) {
 		for (EventSubscription subscription : subscriptions) 
@@ -48,16 +50,25 @@ public class EventBroker {
 		publishEvent(event);
 	}
 	
-	public void publishEvent(Event event) {
+	public void publishAsync(String eventName, Object payload) {
+		Event event = new BaseEvent(eventName, payload, true);
+		publishEvent(event);
+	}
+	
+	public Set<Future<?>> publishEvent(Event event) {
+		Set<Future<?>> futures = new HashSet<Future<?>>();
 		String fullEventName = event.getEventName();
 		EventNameDecoder eventNameDecoder = new EventNameDecoder(fullEventName);
+		EventPublisher publisher = event.isAsync() ? asyncPublisher : syncPublisher;
+		
 		while (eventNameDecoder.hasNext()) {
 			String currentEventName = eventNameDecoder.next();
 			Set<EventConsumer> consumers = getEventConsumers(currentEventName);
-			for (EventConsumer consumer : consumers) {
-				consumer.consume(event);
-			} 
+			for (EventConsumer consumer : consumers)
+				publisher.publish(event, consumer);
 		}
+		
+		return futures;
 	}
 	
 	private Set<EventConsumer> getEventConsumers(String eventName) {
@@ -66,6 +77,14 @@ public class EventBroker {
 			consumers = eventConsumers.get(eventName);
 		
 		return consumers;
+	}
+	
+	public void setSyncEventPublisher(EventPublisher publisher) {
+		this.syncPublisher = publisher;
+	}
+	
+	public void setAsyncEventPublisher(EventPublisher publisher) {
+		this.asyncPublisher = publisher;
 	}
 	
 }

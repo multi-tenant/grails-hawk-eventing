@@ -14,7 +14,6 @@ import org.codehaus.groovy.grails.plugins.GrailsPlugin
 
 class HawkEventingGrailsPlugin {
 
-    def groupId = "plugins.utilities"	
     def version = "0.3"
 
     def grailsVersion = "1.3.0 > *"
@@ -34,8 +33,17 @@ class HawkEventingGrailsPlugin {
     
     def doWithSpring = {
 		
+		// Event publishers
+		syncEventPublisher(SyncEventPublisher)
+		asyncEventPublisher(AsyncEventPublisher) { bean ->
+			bean.autowire = 'byName'
+		} 
+		
 		// Subscription and publishing
-		eventBroker(EventBroker)
+		eventBroker(EventBroker) {
+			syncEventPublisher = ref("syncEventPublisher")
+			asyncEventPublisher = ref("asyncEventPublisher")
+		}
 		
 		// Reads subscriptions from events.groovy
 		eventScriptConfigReader(ScriptConfigurationReader) {
