@@ -1,7 +1,5 @@
 package demo
 
-import grails.plugin.eventing.Event
-import grails.plugin.eventing.EventConsumer
 import grails.plugin.spock.IntegrationSpec
 
 class EventDemoServiceSpec extends IntegrationSpec {

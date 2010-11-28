@@ -1,8 +1,8 @@
 import groovy.lang.Script
 
-import grails.plugin.eventing.*
-import grails.plugin.eventing.config.*
-import grails.plugin.eventing.exceptions.*
+import grails.plugins.hawkeventing.*
+import grails.plugins.hawkeventing.config.*
+import grails.plugins.hawkeventing.exceptions.*
 
 import org.springframework.context.ApplicationContext
 import org.springframework.util.ClassUtils

@@ -1,7 +1,7 @@
 package demo
 
-import grails.plugin.eventing.Event;
-import grails.plugin.eventing.annotation.Consuming;
+import grails.plugins.hawkeventing.Event;
+import grails.plugins.hawkeventing.annotation.Consuming;
 
 class EventDemoService {
 
