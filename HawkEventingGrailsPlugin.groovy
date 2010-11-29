@@ -14,10 +14,12 @@ import org.codehaus.groovy.grails.plugins.GrailsPlugin
 
 class HawkEventingGrailsPlugin {
 
-    def version = "0.4"
+    def version = "0.4.1"
 
     def grailsVersion = "1.3.0 > *"
     def dependsOn = [:]
+	
+	def loadAfter = [ "executor" ]
 
     def pluginExcludes = [
 		"grails-app/views/error.gsp",
@@ -35,9 +37,7 @@ class HawkEventingGrailsPlugin {
 		
 		// Event publishers
 		syncEventPublisher(SyncEventPublisher)
-		asyncEventPublisher(AsyncEventPublisher) { bean ->
-			bean.autowire = 'byName'
-		} 
+		asyncEventPublisher(AsyncEventPublisher)
 		
 		// Subscription and publishing
 		eventBroker(EventBroker) {

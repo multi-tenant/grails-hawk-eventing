@@ -5,11 +5,14 @@ import grails.plugins.hawkeventing.exceptions.EventException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationContext;
+
 /**
  * 
  * @author Kim A. Betti
  */
-class AsyncEventPublisher implements EventPublisher {
+class AsyncEventPublisher implements EventPublisher, ApplicationContextAware {
 	
 	def executorService
 
@@ -24,6 +27,17 @@ class AsyncEventPublisher implements EventPublisher {
 		return executorService.submit {
 			consumer.consume event
 		} as Callable<?>
+	}
+	
+	/**
+	 * Having executorService injected by name screwed up the
+	 * load order for hibernate-hijacker and multi-tenant-core.
+	 * @param ctx
+	 */
+	void setApplicationContext(ApplicationContext ctx) {
+		if (ctx.containsBean("executor")) {
+			executorService = ctx.getBean("executorService")
+		}
 	}
 	
 }
