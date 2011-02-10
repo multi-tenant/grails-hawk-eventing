@@ -68,6 +68,9 @@ Subscribing to events
 
 **Important:** This only works on Spring beans. 
 
+**Important:** This feature is experimental 
+
+    @HawkEventConsumer
 	class BookService {
 	
 		@Consuming("hibernate.save.book")

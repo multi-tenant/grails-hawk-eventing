@@ -7,7 +7,6 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 
 import grails.plugins.hawkeventing.EventBroker;
 import grails.plugins.hawkeventing.EventConsumer;
@@ -18,9 +17,9 @@ import grails.plugins.hawkeventing.annotation.Consuming;
  * Looks at all Spring beans for @Consuming annotations
  * @author Kim A. Betti
  */
-public class SpringBeanAnnotationConfigurationReader implements BeanPostProcessor {
+public class ConsumerAnnotationReader {
 
-	private static final Log log = LogFactory.getLog(SpringBeanAnnotationConfigurationReader.class);
+	private static final Log log = LogFactory.getLog(ConsumerAnnotationReader.class);
 	
 	private EventBroker eventBroker;
 
@@ -28,11 +27,11 @@ public class SpringBeanAnnotationConfigurationReader implements BeanPostProcesso
 		this.eventBroker = eventBroker;
 	}
 
-	@Override
-	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+	public Object addConsumersFromClass(Object bean, String beanName) throws BeansException {
 		for (Method consumerMethod : getConsumerMethods(bean.getClass())) {
 			EventConsumer eventConsumer = new MethodEventConsumer(bean, consumerMethod);
 			for (String eventName : getEventNames(consumerMethod)) {
+				System.out.println(eventName + " => " + beanName);
 				log.info("Subscribing " + eventName + " to " + beanName + ", method " + consumerMethod.getName());
 				eventBroker.subscribe(eventName, eventConsumer);
 			}
@@ -53,11 +52,6 @@ public class SpringBeanAnnotationConfigurationReader implements BeanPostProcesso
 	private String[] getEventNames(Method method) {
 		Consuming consumingAnnotation = method.getAnnotation(Consuming.class);
 		return consumingAnnotation.value();
-	}
-	
-	@Override
-	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-		return bean;
 	}
 	
 }

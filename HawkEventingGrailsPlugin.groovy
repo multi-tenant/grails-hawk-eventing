@@ -1,6 +1,7 @@
 import groovy.lang.Script
 
 import grails.plugins.hawkeventing.*
+import grails.plugins.hawkeventing.annotation.HawkEventConsumer;
 import grails.plugins.hawkeventing.config.*
 import grails.plugins.hawkeventing.exceptions.*
 
@@ -14,7 +15,7 @@ import org.codehaus.groovy.grails.plugins.GrailsPlugin
 
 class HawkEventingGrailsPlugin {
 
-    def version = "0.4.1"
+    def version = "0.4.2"
 
     def grailsVersion = "1.3.0 > *"
     def dependsOn = [:]
@@ -58,18 +59,22 @@ class HawkEventingGrailsPlugin {
 		}
 		
 		// Get consumers from annotated Spring beans
-		springBeanAnnotationConfigReader(SpringBeanAnnotationConfigurationReader) {
+		consumerAnnotationReader(ConsumerAnnotationReader) {
 			eventBroker = ref("eventBroker")
 		}
 		
     }
 	
-    def doWithWebDescriptor = { xml -> }
-	def doWithApplicationContext = { applicationContext -> }
+	def doWithApplicationContext = { ApplicationContext appCtx ->
+		ConsumerAnnotationReader annotationReader = appCtx.getBean("consumerAnnotationReader")
+		appCtx.getBeansWithAnnotation(HawkEventConsumer).each { beanName, bean ->
+			annotationReader.addConsumersFromClass(bean, beanName)
+		}
+	}
 	
+    def doWithWebDescriptor = { xml -> }
 	def onChange = { event -> }
 	def onConfigChange = { event -> }
-	
 	def doWithDynamicMethods = { ctx -> }
 	
 }

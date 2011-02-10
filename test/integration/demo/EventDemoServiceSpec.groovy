@@ -2,6 +2,7 @@ package demo
 
 import grails.plugin.spock.IntegrationSpec
 
+
 class EventDemoServiceSpec extends IntegrationSpec {
 	
 	def eventDemoService
