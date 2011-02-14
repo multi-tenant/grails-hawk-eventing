@@ -6,11 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotate the class containing tenant information with this.
- * This annotation should only be applied to one domain class per project.
+ * Annotate the class containing tenant information with this. This annotation
+ * should only be applied to one domain class per project.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Consuming {
-	String[] value();
+    String[] value();
 }

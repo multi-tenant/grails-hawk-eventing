@@ -14,7 +14,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
 
 /**
- * Looks at all Spring beans for @Consuming annotations
+ * Looks at Spring beans and creates EventConsumers
+ * based on @Consuming annotations.
  * 
  * @author Kim A. Betti
  */

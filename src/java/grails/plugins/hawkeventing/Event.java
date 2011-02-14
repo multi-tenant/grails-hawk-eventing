@@ -8,12 +8,10 @@ import java.util.Date;
  */
 public interface Event {
 
-	Object getPayload();
+    Object getPayload();
 
-	String getEventName();
+    String getEventName();
 
-	Date getCreatedAt();
-
-	boolean isAsync();
+    Date getCreatedAt();
 
 }

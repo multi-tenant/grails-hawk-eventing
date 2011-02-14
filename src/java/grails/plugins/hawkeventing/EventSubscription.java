@@ -6,21 +6,20 @@ package grails.plugins.hawkeventing;
  */
 public class EventSubscription {
 
-	final String eventName;
-	final EventConsumer consumer;
-	
-	public EventSubscription(String eventName, EventConsumer consumer) {
-		super();
-		this.eventName = eventName;
-		this.consumer = consumer;
-	}
+    final String eventName;
+    final EventConsumer consumer;
 
-	public String getEventName() {
-		return eventName;
-	}
+    public EventSubscription(String eventName, EventConsumer consumer) {
+        this.eventName = eventName;
+        this.consumer = consumer;
+    }
 
-	public EventConsumer getConsumer() {
-		return consumer;
-	}
-	
+    public String getEventName() {
+        return eventName;
+    }
+
+    public EventConsumer getConsumer() {
+        return consumer;
+    }
+
 }

@@ -89,6 +89,12 @@ Events published to `hibernate.book.created` will also be published to `hibernat
 Changelog
 ----------
 
+### v0.5 - Valentines day 2010
+ 
+ * Removed the async experiment
+ * Cleaned up code formatting 
+ * Added some JavaDoc and started working on the plugin documentation 
+
 ### v0.4 - November the 28th. 2010
 
  * Started working (not completed) on support for async event publishing if the [Grails Executor](http://grails.org/plugin/executor) plugin is installed (no compile time dependency).
