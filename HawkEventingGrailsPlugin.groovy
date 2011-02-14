@@ -32,7 +32,7 @@ class HawkEventingGrailsPlugin {
 
     def title = "Hawk Eventing"
     def documentation = "http://grails.org/plugin/eventing"
-    def description = 'Event plugin similar to the Falcone-Util plugin, but without the Hibernate integration.'
+    def description = "Very simple in-vm event publish / subscribe system."
 
     def doWithSpring = {
 

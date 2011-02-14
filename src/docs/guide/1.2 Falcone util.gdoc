@@ -1,0 +1,10 @@
+The plugin is based on [Falcone Util|http://grails.org/plugin/falcone-util].
+
+h3. Why another plugin? 
+
+Falcone Util is not actively maintained and contains a lot of code from another project. 
+
+h3. Why not update Falcone Util instead of creating yet another plugin?
+
+People still use and depend on the code in Falcone Util. 
+ 

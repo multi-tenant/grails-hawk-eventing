@@ -1,0 +1,11 @@
+This was implemented to increase compatibility with Falcone Util. You can register events using a simple dsl in @grails-app/conf/events.groovy@.  
+
+{code:java}
+consumers = {
+
+    hibernate.book.created { Event event -> 
+        // Do something with book (event.payload)
+    }
+
+}
+{code}

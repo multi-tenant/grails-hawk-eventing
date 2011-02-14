@@ -1,0 +1,19 @@
+The first thing you have to do is to inject the @eventBroker@ bean where you need it. Grails artifacts are autowired by name so simply adding @def eventBroker@ will suffice.
+
+You can choose whether you want to publish your own custom @Event@ implementation or just any object. If you choose to publish a non-event object it will be wrapped in a @BaseEvent@ before published to any consumers.  
+
+{code:java}
+class UserService {
+
+    def eventBroker
+    
+    User registerUser(String username, ...) {
+        // ...
+        
+        if (success) {
+            eventBroker.publish("user.created", userInstance);
+        }
+    }
+
+}
+{code}

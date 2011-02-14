@@ -1,0 +1,11 @@
+You can register events in the plugin descriptor. By adding a doWithEvents closure. The DSL is the same as the one used in events.groovy.
+
+{code:java}
+def doWithEvents = { ApplicationContext ctx ->
+
+    hibernate.book.created { Event event -> 
+        // Do something with event.payload
+    }
+
+}
+{code}

@@ -1,0 +1,21 @@
+You can configure subscriptions by adding annotations to your beans. 
+
+{note}
+Important! This will only work for Spring beans! 
+{note}
+
+{warning}
+This support is experimental and subject to change. 
+{warning}
+
+{code:java}
+@HawkEventConsumer
+class BookService {
+
+    @Consuming("hibernate.save.book")
+    void onNewBook(Event event) {
+        // do something with event.payload
+    }
+
+}
+{code}

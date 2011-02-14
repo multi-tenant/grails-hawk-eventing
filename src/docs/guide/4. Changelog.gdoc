@@ -1,0 +1,20 @@
+Have a look at [GitHub|http://github.com/multi-tenant/grails-hawk-eventing] for a detailed changelog.  
+
+h3. v0.5 - Valentines day 2010
+ 
+ * Removed the async experiment
+ * Cleaned up code formatting 
+ * Added some JavaDoc and started working on the plugin documentation 
+
+h3. v0.4 - November the 28th. 2010
+
+ * Started working (not completed) on support for async event publishing if the [Grails Executor](http://grails.org/plugin/executor) plugin is installed (no compile time dependency).
+ * Breaking: Refactored package structure to reflect the new name
+
+h3. v0.3 - November the 6th. 2010
+
+* Feature: Support for declaring methods as event consumers using a @Consuming annotation.
+* Refactoring: Moved configuration methods out from the plugin descriptor.
+* Refactoring: Rewritten a lot of the classes in Java + more unit testing. 
+* Breaking: Introduced the Event interface. Objects that's not an instance of Event will be wrapped in the BaseEvent class.
+* Breaking: The EventBroker is not published together with the Event. This way events has the option to be serialized. Consumers in need of the broker should have it injected by Spring.   

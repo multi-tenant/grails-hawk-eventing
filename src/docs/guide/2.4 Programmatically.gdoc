@@ -1,0 +1,35 @@
+You can add your subscriptions during bean initialization. 
+
+h3. Simple event consumer using a closure
+
+{code:java}
+class BookService implements InitializingBean {
+
+    def eventBroker // Injected by Spring
+
+    void afterPropertiesSet() {
+        eventBroker.subscribe("hibernate.book") { Event event ->
+            // Do something with book (event.payload)
+        }
+    }
+
+}
+{code}
+
+h3. Implement the EventConsumer interface
+
+{code:java}
+class MyConsumer implements EventConsumer, InitializingBean {
+
+    EventBroker eventBroker;
+
+    void consume(Event event) {
+        // do something with the event 
+    }
+
+    void afterPropertiesSet() {
+        eventBroker.subscribe("hibernate.saveOrUpdate.author", this);
+    }
+
+}
+{code}
