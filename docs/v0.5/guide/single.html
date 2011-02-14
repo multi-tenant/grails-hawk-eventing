@@ -1,0 +1,79 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>hawk-eventing 0.5 - Reference Documentation</title>
+        <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" title="Style" charset="utf-8"/>
+        <link rel="stylesheet" href="../css/pdf.css" type="text/css" media="print" title="PDF" charset="utf-8" />
+    </head>
+    <body class="body">
+        <div id="header">
+            <div class="images"><br/><br/>
+                <a href="http://grails.org" target="_blank"><img alt="The Grails Framework" src="../img/grails.png" border="0"/></a>
+                <span style="right:30px; top:20px; position:absolute;">
+                    <a href="../index.html" target="_top">Frames</a> | <a href="index.html" target="_top">No Frames</a><br/><br/>
+                    <a href="http://springsource.com" target="_blank"><img alt="SpringSource - A Division of VMware" src="../img/springsource-logo.png" border="0"/></a>
+                </span>
+            </div>
+            <div class="message">hawk-eventing</div>
+            <h1>hawk-eventing - Reference Documentation</h1>
+            <p><strong>Authors:</strong> Kim A. Betti</p>
+            <p><strong>Version:</strong> 0.5</p>
+            <em></em>
+        </div>
+
+        <div id="toc">
+            <h2>Table of Contents</h2>
+            <div class="tocItem" style="margin-left:0px"><a href="#1. Overview">1. Overview</a></div><div class="tocItem" style="margin-left:10px"><a href="#1.1 Design goals">1.1 Design goals</a></div><div class="tocItem" style="margin-left:10px"><a href="#1.2 Falcone util">1.2 Falcone util</a></div><div class="tocItem" style="margin-left:0px"><a href="#2. Subscribing to events">2. Subscribing to events</a></div><div class="tocItem" style="margin-left:10px"><a href="#2.1 Annotations">2.1 Annotations</a></div><div class="tocItem" style="margin-left:10px"><a href="#2.2 Event configuration file">2.2 Event configuration file</a></div><div class="tocItem" style="margin-left:10px"><a href="#2.3 Plugin descriptor">2.3 Plugin descriptor</a></div><div class="tocItem" style="margin-left:10px"><a href="#2.4 Programmatically">2.4 Programmatically</a></div><div class="tocItem" style="margin-left:0px"><a href="#3. Publishing events">3. Publishing events</a></div><div class="tocItem" style="margin-left:10px"><a href="#3.1 Bubbling">3.1 Bubbling</a></div><div class="tocItem" style="margin-left:0px"><a href="#4. Changelog">4. Changelog</a></div><div class="tocItem" style="margin-left:0px"><a href="#5. Roadmap">5. Roadmap</a></div>
+        </div>
+        <div id="content">
+            <h1><a name="1. Overview">1. Overview</a></h1>Hawk Eventing provides a very simple in-vm event publish / subscribe system. <h2><a name="1.1 Design goals">1.1 Design goals</a></h2><ul class="star">
+<li>Keep it simple!</li>
+<li>Be compatible with Falcone Util where possible.</li>
+</ul><p class="paragraph"/><h2><a name="1.2 Falcone util">1.2 Falcone util</a></h2>The plugin is based on <a href="http://grails.org/plugin/falcone-util" target="blank">Falcone Util</a>.<p class="paragraph"/><h3>Why another plugin? </h3><p class="paragraph"/>Falcone Util is not actively maintained and contains a lot of code from another project.<p class="paragraph"/><h3>Why not update Falcone Util instead of creating yet another plugin?</h3><p class="paragraph"/>People still use and depend on the code in Falcone Util. 
+ <h1><a name="2. Subscribing to events">2. Subscribing to events</a></h1>Event subscriptions can be configured in many different ways. <h2><a name="2.1 Annotations">2.1 Annotations</a></h2>You can configure subscriptions by adding annotations to your beans.<p class="paragraph"/><blockquote class="note">
+Important! This will only work for Spring beans! 
+</blockquote><p class="paragraph"/><blockquote class="warning">
+This support is experimental and subject to change. 
+</blockquote><p class="paragraph"/><div class="code"><pre>@HawkEventConsumer
+class BookService &#123;<p class="paragraph"/>    @Consuming(<span class="java&#45;quote">"hibernate.save.book"</span>)
+    void onNewBook(Event event) &#123;
+        // <span class="java&#45;keyword">do</span> something with event.payload
+    &#125;<p class="paragraph"/>&#125;</pre></div><h2><a name="2.2 Event configuration file">2.2 Event configuration file</a></h2>This was implemented to increase compatibility with Falcone Util. You can register events using a simple dsl in <code>grails-app/conf/events.groovy</code>.<p class="paragraph"/><div class="code"><pre>consumers = &#123;<p class="paragraph"/>    hibernate.book.created &#123; Event event &#45;&#62; 
+        // Do something with book (event.payload)
+    &#125;<p class="paragraph"/>&#125;</pre></div><h2><a name="2.3 Plugin descriptor">2.3 Plugin descriptor</a></h2>You can register events in the plugin descriptor. By adding a doWithEvents closure. The DSL is the same as the one used in events.groovy.<p class="paragraph"/><div class="code"><pre>def doWithEvents = &#123; ApplicationContext ctx &#45;&#62;<p class="paragraph"/>    hibernate.book.created &#123; Event event &#45;&#62; 
+        // Do something with event.payload
+    &#125;<p class="paragraph"/>&#125;</pre></div><h2><a name="2.4 Programmatically">2.4 Programmatically</a></h2>You can add your subscriptions during bean initialization.<p class="paragraph"/><h3>Simple event consumer using a closure</h3><p class="paragraph"/><div class="code"><pre>class BookService <span class="java&#45;keyword">implements</span> InitializingBean &#123;<p class="paragraph"/>    def eventBroker // Injected by Spring<p class="paragraph"/>    void afterPropertiesSet() &#123;
+        eventBroker.subscribe(<span class="java&#45;quote">"hibernate.book"</span>) &#123; Event event &#45;&#62;
+            // Do something with book (event.payload)
+        &#125;
+    &#125;<p class="paragraph"/>&#125;</pre></div><p class="paragraph"/><h3>Implement the EventConsumer interface</h3><p class="paragraph"/><div class="code"><pre>class MyConsumer <span class="java&#45;keyword">implements</span> EventConsumer, InitializingBean &#123;<p class="paragraph"/>    EventBroker eventBroker;<p class="paragraph"/>    void consume(Event event) &#123;
+        // <span class="java&#45;keyword">do</span> something with the event 
+    &#125;<p class="paragraph"/>    void afterPropertiesSet() &#123;
+        eventBroker.subscribe(<span class="java&#45;quote">"hibernate.saveOrUpdate.author"</span>, <span class="java&#45;keyword">this</span>);
+    &#125;<p class="paragraph"/>&#125;</pre></div><h1><a name="3. Publishing events">3. Publishing events</a></h1>The first thing you have to do is to inject the <code>eventBroker</code> bean where you need it. Grails artifacts are autowired by name so simply adding <code>def eventBroker</code> will suffice.<p class="paragraph"/>You can choose whether you want to publish your own custom <code>Event</code> implementation or just any object. If you choose to publish a non-event object it will be wrapped in a <code>BaseEvent</code> before published to any consumers.<p class="paragraph"/><div class="code"><pre>class UserService &#123;<p class="paragraph"/>    def eventBroker<p class="paragraph"/>    User registerUser(<span class="java&#45;object">String</span> username, ...) &#123;
+        // ...<p class="paragraph"/>        <span class="java&#45;keyword">if</span> (success) &#123;
+            eventBroker.publish(<span class="java&#45;quote">"user.created"</span>, userInstance);
+        &#125;
+    &#125;<p class="paragraph"/>&#125;</pre></div><h2><a name="3.1 Bubbling">3.1 Bubbling</a></h2>Events published to <code>hibernate.book.created</code> will also be published to <code>hibernate</code> and <code>hibernate</code>.<h1><a name="4. Changelog">4. Changelog</a></h1>Have a look at <a href="http://github.com/multi-tenant/grails-hawk-eventing" target="blank">GitHub</a> for a detailed changelog.<p class="paragraph"/><h3>v0.5 - Valentines day 2010</h3>
+<ul class="star">
+<li>Removed the async experiment</li>
+<li>Cleaned up code formatting</li>
+<li>Added some JavaDoc and started working on the plugin documentation</li>
+</ul><p class="paragraph"/><h3>v0.4 - November the 28th. 2010</h3>
+<ul class="star">
+<li>Started working (not completed) on support for async event publishing if the Grails Executor(http://grails.org/plugin/executor) plugin is installed (no compile time dependency).</li>
+<li>Breaking: Refactored package structure to reflect the new name</li>
+</ul><p class="paragraph"/><h3>v0.3 - November the 6th. 2010</h3>
+<ul class="star">
+<li>Feature: Support for declaring methods as event consumers using a @Consuming annotation.</li>
+<li>Refactoring: Moved configuration methods out from the plugin descriptor.</li>
+<li>Refactoring: Rewritten a lot of the classes in Java + more unit testing.</li>
+<li>Breaking: Introduced the Event interface. Objects that's not an instance of Event will be wrapped in the BaseEvent class.</li>
+<li>Breaking: The EventBroker is not published together with the Event. This way events has the option to be serialized. Consumers in need of the broker should have it injected by Spring.</li>
+</ul><p class="paragraph"/><h1><a name="5. Roadmap">5. Roadmap</a></h1>No roadmap yet, just keep it simple and working with newer versions of Grails. 
+        </div>
+        <div id="footer">
+             Have a nice day!
+        </div>
+    </body>
+</html>

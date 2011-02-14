@@ -1,0 +1,12 @@
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+        <title>2.2 Event configuration file</title>
+        <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" title="Ref" charset="utf-8"/>
+    </head>
+    <body class="body">
+    This was implemented to increase compatibility with Falcone Util. You can register events using a simple dsl in <code>grails-app/conf/events.groovy</code>.<p class="paragraph"/><div class="code"><pre>consumers = &#123;<p class="paragraph"/>    hibernate.book.created &#123; Event event &#45;&#62; 
+        // Do something with book (event.payload)
+    &#125;<p class="paragraph"/>&#125;</pre></div>
+    </body>
+</html>

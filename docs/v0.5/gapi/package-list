@@ -1,0 +1,5 @@
+DefaultPackage
+grails.plugins.hawkeventing
+grails.plugins.hawkeventing.annotation
+grails.plugins.hawkeventing.config
+grails.plugins.hawkeventing.exceptions

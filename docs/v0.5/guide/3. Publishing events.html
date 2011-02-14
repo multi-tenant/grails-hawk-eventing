@@ -1,0 +1,14 @@
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+        <title>3. Publishing events</title>
+        <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" title="Ref" charset="utf-8"/>
+    </head>
+    <body class="body">
+    <h1><a name="3. Publishing events">3. Publishing events</a></h1>The first thing you have to do is to inject the <code>eventBroker</code> bean where you need it. Grails artifacts are autowired by name so simply adding <code>def eventBroker</code> will suffice.<p class="paragraph"/>You can choose whether you want to publish your own custom <code>Event</code> implementation or just any object. If you choose to publish a non-event object it will be wrapped in a <code>BaseEvent</code> before published to any consumers.<p class="paragraph"/><div class="code"><pre>class UserService &#123;<p class="paragraph"/>    def eventBroker<p class="paragraph"/>    User registerUser(<span class="java&#45;object">String</span> username, ...) &#123;
+        // ...<p class="paragraph"/>        <span class="java&#45;keyword">if</span> (success) &#123;
+            eventBroker.publish(<span class="java&#45;quote">"user.created"</span>, userInstance);
+        &#125;
+    &#125;<p class="paragraph"/>&#125;</pre></div><h2><a name="3.1 Bubbling">3.1 Bubbling</a></h2>Events published to <code>hibernate.book.created</code> will also be published to <code>hibernate</code> and <code>hibernate</code>.
+    </body>
+</html>

@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+        <title>2.4 Programmatically</title>
+        <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" title="Ref" charset="utf-8"/>
+    </head>
+    <body class="body">
+    You can add your subscriptions during bean initialization.<p class="paragraph"/><h3>Simple event consumer using a closure</h3><p class="paragraph"/><div class="code"><pre>class BookService <span class="java&#45;keyword">implements</span> InitializingBean &#123;<p class="paragraph"/>    def eventBroker // Injected by Spring<p class="paragraph"/>    void afterPropertiesSet() &#123;
+        eventBroker.subscribe(<span class="java&#45;quote">"hibernate.book"</span>) &#123; Event event &#45;&#62;
+            // Do something with book (event.payload)
+        &#125;
+    &#125;<p class="paragraph"/>&#125;</pre></div><p class="paragraph"/><h3>Implement the EventConsumer interface</h3><p class="paragraph"/><div class="code"><pre>class MyConsumer <span class="java&#45;keyword">implements</span> EventConsumer, InitializingBean &#123;<p class="paragraph"/>    EventBroker eventBroker;<p class="paragraph"/>    void consume(Event event) &#123;
+        // <span class="java&#45;keyword">do</span> something with the event 
+    &#125;<p class="paragraph"/>    void afterPropertiesSet() &#123;
+        eventBroker.subscribe(<span class="java&#45;quote">"hibernate.saveOrUpdate.author"</span>, <span class="java&#45;keyword">this</span>);
+    &#125;<p class="paragraph"/>&#125;</pre></div>
+    </body>
+</html>

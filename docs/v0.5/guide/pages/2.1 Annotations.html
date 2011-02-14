@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+        <title>2.1 Annotations</title>
+        <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" title="Ref" charset="utf-8"/>
+    </head>
+    <body class="body">
+    You can configure subscriptions by adding annotations to your beans.<p class="paragraph"/><blockquote class="note">
+Important! This will only work for Spring beans! 
+</blockquote><p class="paragraph"/><blockquote class="warning">
+This support is experimental and subject to change. 
+</blockquote><p class="paragraph"/><div class="code"><pre>@HawkEventConsumer
+class BookService &#123;<p class="paragraph"/>    @Consuming(<span class="java&#45;quote">"hibernate.save.book"</span>)
+    void onNewBook(Event event) &#123;
+        // <span class="java&#45;keyword">do</span> something with event.payload
+    &#125;<p class="paragraph"/>&#125;</pre></div>
+    </body>
+</html>

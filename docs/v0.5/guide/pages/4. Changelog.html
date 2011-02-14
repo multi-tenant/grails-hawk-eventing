@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+        <title>4. Changelog</title>
+        <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" title="Ref" charset="utf-8"/>
+    </head>
+    <body class="body">
+    Have a look at <a href="http://github.com/multi-tenant/grails-hawk-eventing" target="blank">GitHub</a> for a detailed changelog.<p class="paragraph"/><h3>v0.5 - Valentines day 2010</h3>
+<ul class="star">
+<li>Removed the async experiment</li>
+<li>Cleaned up code formatting</li>
+<li>Added some JavaDoc and started working on the plugin documentation</li>
+</ul><p class="paragraph"/><h3>v0.4 - November the 28th. 2010</h3>
+<ul class="star">
+<li>Started working (not completed) on support for async event publishing if the Grails Executor(http://grails.org/plugin/executor) plugin is installed (no compile time dependency).</li>
+<li>Breaking: Refactored package structure to reflect the new name</li>
+</ul><p class="paragraph"/><h3>v0.3 - November the 6th. 2010</h3>
+<ul class="star">
+<li>Feature: Support for declaring methods as event consumers using a @Consuming annotation.</li>
+<li>Refactoring: Moved configuration methods out from the plugin descriptor.</li>
+<li>Refactoring: Rewritten a lot of the classes in Java + more unit testing.</li>
+<li>Breaking: Introduced the Event interface. Objects that's not an instance of Event will be wrapped in the BaseEvent class.</li>
+<li>Breaking: The EventBroker is not published together with the Event. This way events has the option to be serialized. Consumers in need of the broker should have it injected by Spring.</li>
+</ul><p class="paragraph"/>
+    </body>
+</html>
