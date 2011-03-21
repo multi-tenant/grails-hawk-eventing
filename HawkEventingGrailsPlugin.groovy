@@ -15,7 +15,7 @@ import org.codehaus.groovy.grails.plugins.GrailsPlugin
 
 class HawkEventingGrailsPlugin {
 
-    def version = "0.5"
+    def version = "0.5.1"
 
     def grailsVersion = "1.3.0 > *"
     def dependsOn = [:]
@@ -24,14 +24,15 @@ class HawkEventingGrailsPlugin {
 
     def pluginExcludes = [
         "grails-app/views/error.gsp",
-        "grails-app/conf/events.groovy"
+        "grails-app/conf/events.groovy",
+        "grails-app/services/**",
     ]
 
     def author = "Kim A. Betti"
     def authorEmail = "kim@developer-b.com"
 
     def title = "Hawk Eventing"
-    def documentation = "http://grails.org/plugin/eventing"
+    def documentation = "https://github.com/multi-tenant/grails-hawk-eventing"
     def description = "Very simple in-vm event publish / subscribe system."
 
     def doWithSpring = {
@@ -44,7 +45,9 @@ class HawkEventingGrailsPlugin {
         }
 
         // Reads subscriptions from events.groovy
-        eventScriptConfigReader(ScriptConfigurationReader) { eventBroker = ref("eventBroker") }
+        eventScriptConfigReader(ScriptConfigurationReader) { 
+            eventBroker = ref("eventBroker") 
+        }
 
         // Reads subscriptions from other plugins
         otherPluginConfigReader(OtherPluginsConfigurationReader) {
@@ -54,11 +57,13 @@ class HawkEventingGrailsPlugin {
         }
 
         // Get consumers from annotated Spring beans
-        consumerAnnotationReader(ConsumerAnnotationReader) { eventBroker = ref("eventBroker") }
+        consumerAnnotationReader(ConsumerAnnotationReader) {
+            eventBroker = ref("eventBroker")
+        }
     }
 
     def doWithApplicationContext = { ApplicationContext appCtx ->
-        ConsumerAnnotationReader annotationReader = appCtx.getBean("consumerAnnotationReader")
+        ConsumerAnnotationReader annotationReader = appCtx.consumerAnnotationReader
         appCtx.getBeansWithAnnotation(HawkEventConsumer).each { beanName, bean ->
             annotationReader.addConsumersFromClass(bean, beanName)
         }
@@ -68,4 +73,5 @@ class HawkEventingGrailsPlugin {
     def onChange = { event -> }
     def onConfigChange = { event -> }
     def doWithDynamicMethods = { ctx -> }
+    
 }
