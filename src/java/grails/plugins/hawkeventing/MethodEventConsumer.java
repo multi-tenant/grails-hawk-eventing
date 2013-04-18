@@ -39,9 +39,8 @@ public class MethodEventConsumer implements EventConsumer {
     }
 
     private void onReflectionException(Exception ex, Event event) {
-        String exMessage = "Unable to notify " + consumer + " of "
-        + event.getEventName() + " because of reflection related exception";
-        throw new EventException(exMessage, ex);
+        throw new EventException("Unable to notify " + consumer + " of "
+              + event.getEventName() + " because of reflection related exception", ex);
     }
 
 }

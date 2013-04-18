@@ -1,10 +1,9 @@
 package grails.plugins.hawkeventing
 
-import grails.plugin.spock.*
+import grails.plugin.spock.UnitSpec
 import grails.plugins.hawkeventing.exceptions.InvalidEventConfigurationException
 
 /**
- *
  * @author Kim A. Betti <kim.betti@gmail.com>
  */
 class ConsumerBuilderSpec extends UnitSpec {

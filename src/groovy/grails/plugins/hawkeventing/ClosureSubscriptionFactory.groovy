@@ -5,7 +5,7 @@ import grails.plugins.hawkeventing.exceptions.InvalidEventConfigurationException
 /**
  * See tests for usage.
  * TODO: give a better name
- * 
+ *
  * @author Kim A. Betti <kim.betti@gmail.com>
  */
 class ClosureSubscriptionFactory implements EventConsumerConfiguration {
@@ -20,12 +20,12 @@ class ClosureSubscriptionFactory implements EventConsumerConfiguration {
         this.closureArgument = ctx
     }
 
-    public static ClosureSubscriptionFactory fromClosure(Closure configurationClosure, Object ctx = null) {
+    static ClosureSubscriptionFactory fromClosure(Closure configurationClosure, Object ctx = null) {
         return new ClosureSubscriptionFactory(configurationClosure, ctx)
     }
 
     @Override
-    public Set<EventSubscription> getSubscriptions() {
+    Set<EventSubscription> getSubscriptions() {
         invokeConfgurationClosure()
         return this.subscriptions
     }
