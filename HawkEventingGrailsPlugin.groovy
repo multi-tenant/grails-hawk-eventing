@@ -1,29 +1,19 @@
-import groovy.lang.Script
-
-import grails.plugins.hawkeventing.*
-import grails.plugins.hawkeventing.annotation.HawkEventConsumer;
-import grails.plugins.hawkeventing.config.*
-import grails.plugins.hawkeventing.exceptions.*
+import grails.plugins.hawkeventing.EventBroker
+import grails.plugins.hawkeventing.SyncEventPublisher
+import grails.plugins.hawkeventing.annotation.HawkEventConsumer
+import grails.plugins.hawkeventing.config.ConsumerAnnotationReader
+import grails.plugins.hawkeventing.config.OtherPluginsConfigurationReader
+import grails.plugins.hawkeventing.config.ScriptConfigurationReader
 
 import org.springframework.context.ApplicationContext
-import org.springframework.util.ClassUtils
-
-import org.codehaus.groovy.grails.commons.GrailsApplication
-import org.codehaus.groovy.grails.commons.spring.GrailsApplicationContext
-import org.codehaus.groovy.grails.plugins.DefaultGrailsPluginManager
-import org.codehaus.groovy.grails.plugins.GrailsPlugin
 
 class HawkEventingGrailsPlugin {
 
     def version = "0.7"
 
     def grailsVersion = "1.3.0 > *"
-    def dependsOn = [:]
-
-    def loadAfter = []
 
     def pluginExcludes = [
-        "grails-app/views/error.gsp",
         "grails-app/conf/events.groovy",
         "grails-app/services/**",
     ]
@@ -35,6 +25,11 @@ class HawkEventingGrailsPlugin {
     def documentation = "https://github.com/multi-tenant/grails-hawk-eventing"
     def description = "Very simple in-vm event publish / subscribe system."
 
+    def license = "APACHE"
+//    def developers = [[name: "Joe Bloggs", email: "joe@bloggs.net"]]
+    def issueManagement = [system: 'GitHub', url: 'https://github.com/multi-tenant/grails-hawk-eventing/issues']
+    def scm = [url: 'https://github.com/multi-tenant/grails-hawk-eventing']
+
     def doWithSpring = {
 
         syncEventPublisher(SyncEventPublisher)
@@ -45,8 +40,8 @@ class HawkEventingGrailsPlugin {
         }
 
         // Reads subscriptions from events.groovy
-        eventScriptConfigReader(ScriptConfigurationReader) { 
-            eventBroker = ref("eventBroker") 
+        eventScriptConfigReader(ScriptConfigurationReader) {
+            eventBroker = ref("eventBroker")
         }
 
         // Reads subscriptions from other plugins
@@ -68,10 +63,4 @@ class HawkEventingGrailsPlugin {
             annotationReader.addConsumersFromClass(bean, beanName)
         }
     }
-
-    def doWithWebDescriptor = { xml -> }
-    def onChange = { event -> }
-    def onConfigChange = { event -> }
-    def doWithDynamicMethods = { ctx -> }
-    
 }

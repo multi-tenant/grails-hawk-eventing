@@ -1,19 +1,18 @@
 package demo
 
-import grails.plugins.hawkeventing.Event;
-import grails.plugins.hawkeventing.annotation.Consuming;
-import grails.plugins.hawkeventing.annotation.HawkEventConsumer;
+import grails.plugins.hawkeventing.Event
+import grails.plugins.hawkeventing.annotation.Consuming
+import grails.plugins.hawkeventing.annotation.HawkEventConsumer
 
 @HawkEventConsumer
 class EventDemoService {
 
-    static transactional = false
-	
-	String latestBook = null
+	static transactional = false
+
+	String latestBook
 
 	@Consuming("book.created")
-    def bookCreated(Event event) {
+	def bookCreated(Event event) {
 		latestBook = event.getPayload()
-    }
-		
+	}
 }
