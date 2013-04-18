@@ -35,10 +35,6 @@ public class BaseEvent implements Event {
 
     @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer(100);
-        buffer.append("Event[").append(eventName).append("]");
-        buffer.append(", payload: " + payload);
-        return buffer.toString();
+        return "Event[" + eventName + "], payload: " + payload;
     }
-
 }
