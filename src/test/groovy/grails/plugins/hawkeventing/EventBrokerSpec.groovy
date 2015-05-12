@@ -1,12 +1,14 @@
 package grails.plugins.hawkeventing
 
-import grails.plugin.spock.UnitSpec
+import spock.lang.Specification
+
+//import grails.plugin.spock.UnitSpec
 
 /**
  * 
  * @author Kim A. Betti <kim.betti@gmail.com>
  */
-class EventBrokerSpec extends UnitSpec {
+class EventBrokerSpec extends Specification {
 
     def broker
 

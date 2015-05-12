@@ -30,7 +30,7 @@ class ScriptConfigurationReader {
         try {
             Class<?> configClass = getConfigClass();
             Closure configClosure = extractConfigClosure(configClass);
-            Set<EventSubscription> subscriptions = ClosureSubscriptionFactory.fromClosure(configClosure).getSubscriptions();
+            Set<EventSubscription> subscriptions = ClosureSubscriptionFactory.fromClosure(configClosure,null).getSubscriptions();
             eventBroker.subscribe(subscriptions);
         } catch (ClassNotFoundException ex) {
             missingConfigScript();

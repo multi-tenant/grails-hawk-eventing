@@ -1,3 +1,6 @@
+package hawkeventing
+
+import grails.plugins.*
 import grails.plugins.hawkeventing.EventBroker
 import grails.plugins.hawkeventing.SyncEventPublisher
 import grails.plugins.hawkeventing.annotation.HawkEventConsumer
@@ -7,12 +10,11 @@ import grails.plugins.hawkeventing.config.ScriptConfigurationReader
 
 import org.springframework.context.ApplicationContext
 
-class HawkEventingGrailsPlugin {
+class HawkEventingGrailsPlugin extends Plugin {
 
-    def version = "0.7"
-
-    def grailsVersion = "1.3.0 > *"
-
+    // the version or versions of Grails the plugin is designed for
+    def grailsVersion = "3.0.1 > *"
+    // resources that are excluded from plugin packaging
     def pluginExcludes = [
         "grails-app/conf/events.groovy",
         "grails-app/services/**",
