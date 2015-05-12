@@ -1,12 +1,13 @@
 package grails.plugins.hawkeventing
 
-import grails.plugin.spock.UnitSpec
+//import grails.plugin.spock.UnitSpec
 import grails.plugins.hawkeventing.exceptions.InvalidEventConfigurationException
+import spock.lang.Specification
 
 /**
  * @author Kim A. Betti <kim.betti@gmail.com>
  */
-class ConsumerBuilderSpec extends UnitSpec {
+class ConsumerBuilderSpec extends Specification {
 
     def "Single event definition"() {
         when:

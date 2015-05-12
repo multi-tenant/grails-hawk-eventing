@@ -1,13 +1,14 @@
 package grails.plugins.hawkeventing
 
-import grails.plugin.spock.UnitSpec
+//import grails.plugin.spock.UnitSpec
+import spock.lang.Specification
 import spock.lang.Unroll
 
 /**
  *
  * @author Kim A. Betti <kim.betti@gmail.com>
  */
-class EventNameDecoderSpec extends UnitSpec {
+class EventNameDecoderSpec extends Specification {
 
     @Unroll
     def "Decoding event name #fullEventName into #expectedEvents"() {
