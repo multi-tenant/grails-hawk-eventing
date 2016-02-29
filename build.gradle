@@ -12,7 +12,7 @@ buildscript {
 }
 
 version "0.1.0"
-group "hawkeventing"
+group "org.grails.plugins"
 
 apply plugin:"eclipse"
 apply plugin:"idea"
@@ -71,7 +71,7 @@ grailsPublish {
     }
     title = "Hibernate Hijacker"
     desc = ""
-    //developers = [""]
+    developers = ["kimble":"Kim A. Betti"]
     portalUser = System.getenv('GRAILS_PORTAL_USER')
     portalPassword = System.getenv('GRAILS_PORTAL_PASSWORD')   
 }
