@@ -62,15 +62,16 @@ task wrapper(type: Wrapper) {
 }
 grailsPublish {
     // TODO: Provide values here
-    user = 'user'
-    key = 'key'
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    //userOrg = '' // Optional
     githubSlug = 'foo/bar'
     license {
         name = 'Apache-2.0'
     }
-    title = "My Plugin"
-    desc = "Full plugin description"
-    developers = [johndoe:"John Doe"]
-    portalUser = ""
-    portalPassword = ""    
+    title = "Hibernate Hijacker"
+    desc = ""
+    //developers = [""]
+    portalUser = System.getenv('GRAILS_PORTAL_USER')
+    portalPassword = System.getenv('GRAILS_PORTAL_PASSWORD')   
 }
