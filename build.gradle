@@ -11,7 +11,7 @@ buildscript {
     }
 }
 
-version "0.1.0"
+version "0.6.0"
 group "org.grails.plugins"
 
 apply plugin:"eclipse"
@@ -69,7 +69,7 @@ grailsPublish {
     license {
         name = 'Apache-2.0'
     }
-    title = "Hibernate Hijacker"
+    title = "Hawk Eventing"
     desc = ""
     developers = ["kimble":"Kim A. Betti"]
     portalUser = System.getenv('GRAILS_PORTAL_USER')
