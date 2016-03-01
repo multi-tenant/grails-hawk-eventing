@@ -65,12 +65,12 @@ grailsPublish {
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_KEY')
     //userOrg = '' // Optional
-    githubSlug = 'foo/bar'
+    githubSlug = 'multi-tenant/grails-hawk-eventing'
     license {
         name = 'Apache-2.0'
     }
     title = "Hawk Eventing"
-    desc = ""
+    desc = "Simple event broker based on the Falcone-Util plugin"
     developers = ["kimble":"Kim A. Betti"]
     portalUser = System.getenv('GRAILS_PORTAL_USER')
     portalPassword = System.getenv('GRAILS_PORTAL_PASSWORD')   
