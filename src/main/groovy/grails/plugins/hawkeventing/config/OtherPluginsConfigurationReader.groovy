@@ -12,6 +12,7 @@ import grails.plugins.GrailsPluginManager
 
 import org.springframework.beans.factory.config.RuntimeBeanReference
 import org.springframework.beans.factory.InitializingBean
+import org.springframework.beans.factory.annotation.Autowired
 
 /**
  * Generates subscriptions from plugins providing
@@ -25,12 +26,16 @@ class OtherPluginsConfigurationReader implements InitializingBean {
 
 	public static final String EVENT_CLOSURE_PROPERTY_NAME = "doWithEvents"
 
+        @Autowired
 	EventBroker eventBroker
+        @Autowired
 	GrailsApplication grailsApplication
+        @Autowired
 	GrailsPluginManager pluginManager
 
 	void afterPropertiesSet() {
 		log.debug "Reading event configuration from installed plugins"
+                //def allPlugins = grailsApplication.getMainContext().getBean('pluginManager').allPlugins
 		pluginManager.getAllPlugins().each { GrailsPlugin plugin ->
 			def pluginPropeties = plugin.getInstance().properties
 			if (pluginPropeties.containsKey("doWithEvents")) {
