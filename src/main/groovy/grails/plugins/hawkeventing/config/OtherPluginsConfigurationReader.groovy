@@ -9,6 +9,8 @@ import org.apache.commons.logging.LogFactory
 import grails.core.GrailsApplication
 import grails.plugins.GrailsPlugin
 import grails.plugins.GrailsPluginManager
+
+import org.springframework.beans.factory.config.RuntimeBeanReference
 import org.springframework.beans.factory.InitializingBean
 
 /**
@@ -29,8 +31,8 @@ class OtherPluginsConfigurationReader implements InitializingBean {
 
 	void afterPropertiesSet() {
 		log.debug "Reading event configuration from installed plugins"
-		pluginManager.allPlugins.each { GrailsPlugin plugin ->
-			def pluginPropeties = plugin.instance.properties
+		pluginManager.getAllPlugins().each { GrailsPlugin plugin ->
+			def pluginPropeties = plugin.getInstance().properties
 			if (pluginPropeties.containsKey("doWithEvents")) {
 				log.debug "Found event configuration in $plugin.name"
 				Closure configClosure = pluginPropeties.get(EVENT_CLOSURE_PROPERTY_NAME)

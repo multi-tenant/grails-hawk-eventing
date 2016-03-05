@@ -28,41 +28,49 @@ class HawkEventingGrailsPlugin extends Plugin {
     def description = "Very simple in-vm event publish / subscribe system."
 
     def license = "APACHE"
-//    def developers = [[name: "Joe Bloggs", email: "joe@bloggs.net"]]
+    //    def developers = [[name: "Joe Bloggs", email: "joe@bloggs.net"]]
     def issueManagement = [system: 'GitHub', url: 'https://github.com/multi-tenant/grails-hawk-eventing/issues']
     def scm = [url: 'https://github.com/multi-tenant/grails-hawk-eventing']
 
-    def doWithSpring = {
+    Closure doWithSpring() { {->
 
-        syncEventPublisher(SyncEventPublisher)
+            syncEventPublisher(SyncEventPublisher)
 
-        // Subscription and publishing
-        eventBroker(EventBroker) {
-            eventPublisher = ref("syncEventPublisher")
+            // Subscription and publishing
+            eventBroker(EventBroker) {
+                eventPublisher = ref("syncEventPublisher")
+            }
+
+            // Reads subscriptions from events.groovy
+            eventScriptConfigReader(ScriptConfigurationReader) {
+                eventBroker = ref("eventBroker")
+            }
+
+            // Reads subscriptions from other plugins
+            otherPluginConfigReader(OtherPluginsConfigurationReader) {
+                eventBroker = ref("eventBroker")
+                pluginManager = ref("pluginManager")
+                grailsApplication = ref("grailsApplication")
+            }
+
+            // Get consumers from annotated Spring beans
+            consumerAnnotationReader(ConsumerAnnotationReader) {
+                eventBroker = ref("eventBroker")
+            }
         }
 
-        // Reads subscriptions from events.groovy
-        eventScriptConfigReader(ScriptConfigurationReader) {
-            eventBroker = ref("eventBroker")
-        }
-
-        // Reads subscriptions from other plugins
-        otherPluginConfigReader(OtherPluginsConfigurationReader) {
-            eventBroker = ref("eventBroker")
-            pluginManager = ref("pluginManager")
-            grailsApplication = ref("grailsApplication")
-        }
-
-        // Get consumers from annotated Spring beans
-        consumerAnnotationReader(ConsumerAnnotationReader) {
-            eventBroker = ref("eventBroker")
-        }
+        
+            
+        
+    
     }
 
-    def doWithApplicationContext = { ApplicationContext appCtx ->
-        ConsumerAnnotationReader annotationReader = appCtx.consumerAnnotationReader
-        appCtx.getBeansWithAnnotation(HawkEventConsumer).each { beanName, bean ->
+    void doWithApplicationContext() {
+           println "Do with application context in hawk eventing" 
+        ConsumerAnnotationReader annotationReader = applicationContext.consumerAnnotationReader
+        applicationContext.getBeansWithAnnotation(HawkEventConsumer).each { beanName, bean ->
             annotationReader.addConsumersFromClass(bean, beanName)
         }
     }
+
 }
