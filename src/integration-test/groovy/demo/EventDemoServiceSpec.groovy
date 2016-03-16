@@ -14,7 +14,7 @@ import spock.lang.*
  * @author Kim A. Betti
  */
 @Integration
-@Rollback
+//@Rollback
 class EventDemoServiceSpec extends Specification {
 
     @Autowired

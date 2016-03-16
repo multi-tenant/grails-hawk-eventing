@@ -36,27 +36,27 @@ class HawkEventingGrailsPlugin extends Plugin {
 
             syncEventPublisher(SyncEventPublisher)
 
-            // Subscription and publishing
-            eventBroker(EventBroker) {
-                eventPublisher = ref("syncEventPublisher")
-            }
+        // Subscription and publishing
+        eventBroker(EventBroker) {
+            eventPublisher = ref("syncEventPublisher")
+        }
 
-            // Reads subscriptions from events.groovy
-            eventScriptConfigReader(ScriptConfigurationReader) {
-                eventBroker = ref("eventBroker")
-            }
+        // Reads subscriptions from events.groovy
+        eventScriptConfigReader(ScriptConfigurationReader) {
+            eventBroker = ref("eventBroker")
+        }
 
-            // Reads subscriptions from other plugins
-            otherPluginConfigReader(OtherPluginsConfigurationReader) {
-                eventBroker = ref("eventBroker")
-                pluginManager = ref("pluginManager")
-                grailsApplication = ref("grailsApplication")
-            }
+        // Reads subscriptions from other plugins
+        otherPluginConfigReader(OtherPluginsConfigurationReader) {
+            eventBroker = ref("eventBroker")
+//            pluginManager = ref("pluginManager")
+//            grailsApplication = ref("grailsApplication")
+        }
 
-            // Get consumers from annotated Spring beans
-            consumerAnnotationReader(ConsumerAnnotationReader) {
-                eventBroker = ref("eventBroker")
-            }
+        // Get consumers from annotated Spring beans
+        consumerAnnotationReader(ConsumerAnnotationReader) {
+            eventBroker = ref("eventBroker")
+        }
         }
 
         
@@ -66,7 +66,7 @@ class HawkEventingGrailsPlugin extends Plugin {
     }
 
     void doWithApplicationContext() {
-           println "Do with application context in hawk eventing" 
+        println "doing with app context"
         ConsumerAnnotationReader annotationReader = applicationContext.consumerAnnotationReader
         applicationContext.getBeansWithAnnotation(HawkEventConsumer).each { beanName, bean ->
             annotationReader.addConsumersFromClass(bean, beanName)

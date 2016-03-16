@@ -11,6 +11,8 @@ import grails.plugins.GrailsPlugin
 import grails.plugins.GrailsPluginManager
 
 import org.springframework.beans.factory.config.RuntimeBeanReference
+import org.springframework.context.ApplicationContextAware
+
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Autowired
 

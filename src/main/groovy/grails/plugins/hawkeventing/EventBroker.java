@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
+import org.springframework.beans.factory.annotation.Autowired;
 /**
  * 
  * @author Kim A. Betti
@@ -16,6 +16,7 @@ public class EventBroker {
 
     private Map<String, Set<EventConsumer>> eventConsumers = Collections.synchronizedMap(new HashMap<String, Set<EventConsumer>>());
 
+    @Autowired
     private EventPublisher eventPublisher;
 
     public void subscribe(Set<EventSubscription> subscriptions) {

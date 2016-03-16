@@ -1,13 +1,15 @@
 package grails.plugins.hawkeventing.config
 
-//import grails.plugin.spock.UnitSpec
 import grails.plugins.hawkeventing.EventBroker
-import spock.lang.Specification
+import grails.plugins.hawkeventing.EventSubscription;
+import grails.test.mixin.TestMixin
+import grails.test.mixin.support.GrailsUnitTestMixin
+import spock.lang.*
 
 /**
- * 
- * @author Kim A. Betti <kim.betti@gmail.com>
+ * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
+@TestMixin(GrailsUnitTestMixin)
 class ScriptConfigurationReaderSpec extends Specification {
 
     def "extract consumer configuration from events dot groovy"() {
@@ -15,7 +17,7 @@ class ScriptConfigurationReaderSpec extends Specification {
         ScriptConfigurationReader reader = Spy()
 //        def  = new ScriptConfigurationReader()
         def broker = Mock(EventBroker)
-
+        
         when: 
         def consumerConfig = reader.setEventBroker(broker)
         then: 

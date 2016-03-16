@@ -1,5 +1,6 @@
 package grails.plugins.hawkeventing.config;
 
+import grails.core.GrailsApplication;
 import grails.plugins.hawkeventing.ClosureSubscriptionFactory;
 import grails.plugins.hawkeventing.EventBroker;
 import grails.plugins.hawkeventing.EventSubscription;
@@ -16,7 +17,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Reads configuration from a groovy script. The script should contain a
  * 'consumers' closure.
- * 
+ *
  * @author Kim A. Betti
  */
 class ScriptConfigurationReader {
@@ -26,11 +27,16 @@ class ScriptConfigurationReader {
 
     private static final Log log = LogFactory.getLog(ScriptConfigurationReader.class);
 
+//    EventBroker eventBroker;
+    
     public void setEventBroker(EventBroker eventBroker) {
         try {
+//            System.out.println("getting config");
             Class<?> configClass = getConfigClass();
+//            System.out.println("Got config class = "+configClass);
             Closure configClosure = extractConfigClosure(configClass);
-            Set<EventSubscription> subscriptions = ClosureSubscriptionFactory.fromClosure(configClosure,null).getSubscriptions();
+            Set<EventSubscription> subscriptions = ClosureSubscriptionFactory.fromClosure(configClosure).getSubscriptions();
+//            System.out.println("got subscriptions");
             eventBroker.subscribe(subscriptions);
         } catch (ClassNotFoundException ex) {
             missingConfigScript();
@@ -42,8 +48,15 @@ class ScriptConfigurationReader {
     }
 
     private Class<?> getConfigClass() throws ClassNotFoundException {
-        ClassLoader classLoader = this.getClass().getClassLoader();
-        return Class.forName(CONFIG_SCRIPT_NAME, false, classLoader);
+//        System.out.println("getting grails app");
+        GrailsApplication grailsApplication = grails.util.Holders.getGrailsApplication();
+//        System.out.println("got grails app = ${grailsApplication}");
+        ClassLoader classLoader = grailsApplication.getClassLoader();
+//        System.out.println("getting class loader");
+//        System.out.println("got class loader ${classLoader}");
+//        Class<?> result =  grailsApplication.getClassForName(CONFIG_SCRIPT_NAME);
+      Class<?> result = Class.forName(CONFIG_SCRIPT_NAME, true, classLoader);
+        return result;
     }
 
     private Closure extractConfigClosure(Class<?> configClass) throws Exception {
