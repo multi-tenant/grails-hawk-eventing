@@ -1,12 +1,12 @@
 package grails.plugins.hawkeventing
 
-import grails.plugin.spock.UnitSpec
 import grails.plugins.hawkeventing.exceptions.InvalidEventConfigurationException
+import spock.lang.Specification
 
 /**
  * @author Kim A. Betti <kim.betti@gmail.com>
  */
-class ConsumerBuilderSpec extends UnitSpec {
+class ConsumerBuilderSpec extends Specification {
 
     def "Single event definition"() {
         when:
@@ -36,7 +36,7 @@ class ConsumerBuilderSpec extends UnitSpec {
         Set subscriptions = ClosureSubscriptionFactory.fromClosure {
             hibernate.book.delete { book -> }
             hibernate.sessionCreated { session -> }
-            customEvent {  }
+            customEvent {}
         }.getSubscriptions()
 
         then: "Three consumers are added"
@@ -44,9 +44,9 @@ class ConsumerBuilderSpec extends UnitSpec {
 
         and: "With the correct event names"
         shouldSubscribeTo(subscriptions, [
-            "hibernate.book.delete",
-            "hibernate.sessionCreated",
-            "customEvent"
+                "hibernate.book.delete",
+                "hibernate.sessionCreated",
+                "customEvent"
         ])
     }
 

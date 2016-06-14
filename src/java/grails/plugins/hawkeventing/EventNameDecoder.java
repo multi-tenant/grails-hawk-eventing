@@ -6,18 +6,16 @@ import java.util.Iterator;
  * Used with event bubbling. It takes a full event name
  * and spits of out all the event names that should receive
  * the event.
- * 
+ * <p>
  * Example: hibernate.save.book should be published to
  * ---------------------------------------------------
- *  - hibernate.save.book
- *  - hibernate.save
- *  - hibernate
- * 
+ * - hibernate.save.book
+ * - hibernate.save
+ * - hibernate
+ *
  * @author Kim A. Betti
  */
 public class EventNameDecoder implements Iterator<String> {
-
-    public final char EVENT_SEPARATOR_CHAR = '.';
 
     private final String fullEventName;
     private int dotIdx = 0;
@@ -33,6 +31,7 @@ public class EventNameDecoder implements Iterator<String> {
 
     @Override
     public String next() {
+        char EVENT_SEPARATOR_CHAR = '.';
         int endIndex = fullEventName.indexOf(EVENT_SEPARATOR_CHAR, dotIdx);
         if (endIndex < 0) {
             endIndex = fullEventName.length();

@@ -1,11 +1,7 @@
-
 consumers = {
-
-    hibernate.save.book { book -> 
-        // Do something with book
+    hibernate.save.book { book ->
     }
-	
-	hibernate {
-	}
 
+    hibernate {
+    }
 }

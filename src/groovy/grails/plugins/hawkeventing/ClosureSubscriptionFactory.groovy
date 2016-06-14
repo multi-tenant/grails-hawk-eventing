@@ -30,7 +30,7 @@ class ClosureSubscriptionFactory implements EventConsumerConfiguration {
         return this.subscriptions
     }
 
-    private void invokeConfgurationClosure(Closure cfgClosure) {
+    private void invokeConfgurationClosure() {
         configurationClosure.delegate = this
         configurationClosure.call(closureArgument)
     }
@@ -63,7 +63,7 @@ class ClosureSubscriptionFactory implements EventConsumerConfiguration {
     }
 
     private Closure getEventHandler(Object[] arguments) {
-        Object lastArgument = arguments[arguments.length-1]
+        Object lastArgument = arguments[arguments.length - 1]
         if (!isClosure(lastArgument)) {
             String msg = "Expected the last argument to be a closure, not " + lastArgument.getClass().name
             throw new InvalidEventConfigurationException(msg)

@@ -3,7 +3,6 @@ package grails.plugins.hawkeventing;
 import groovy.lang.Closure;
 
 /**
- * 
  * @author Kim A. Betti
  */
 class ClosureEventConsumer implements EventConsumer {

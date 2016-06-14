@@ -4,19 +4,18 @@ import grails.plugins.hawkeventing.EventBroker;
 import grails.plugins.hawkeventing.EventConsumer;
 import grails.plugins.hawkeventing.MethodEventConsumer;
 import grails.plugins.hawkeventing.annotation.Consuming;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeansException;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.BeansException;
-
 /**
  * Looks at Spring beans and creates EventConsumers
  * based on @Consuming annotations.
- * 
+ *
  * @author Kim A. Betti
  */
 public class ConsumerAnnotationReader {
