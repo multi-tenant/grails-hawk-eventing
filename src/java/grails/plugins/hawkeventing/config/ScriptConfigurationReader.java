@@ -7,22 +7,21 @@ import grails.plugins.hawkeventing.exceptions.InvalidEventConfigurationException
 import groovy.lang.Closure;
 import groovy.lang.MissingPropertyException;
 import groovy.lang.Script;
-
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import java.util.Set;
 
 /**
  * Reads configuration from a groovy script. The script should contain a
  * 'consumers' closure.
- * 
+ *
  * @author Kim A. Betti
  */
 class ScriptConfigurationReader {
 
-    public final String CONFIG_SCRIPT_NAME = "events";
-    public final String CONFIG_CLOSURE_PROPERTY_NAME = "consumers";
+    private final String CONFIG_SCRIPT_NAME = "events";
+    private final String CONFIG_CLOSURE_PROPERTY_NAME = "consumers";
 
     private static final Log log = LogFactory.getLog(ScriptConfigurationReader.class);
 

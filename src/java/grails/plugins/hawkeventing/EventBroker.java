@@ -2,14 +2,9 @@ package grails.plugins.hawkeventing;
 
 import groovy.lang.Closure;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
- * 
  * @author Kim A. Betti
  */
 public class EventBroker {
@@ -54,6 +49,7 @@ public class EventBroker {
      * Use this method to publish a basic event with any kind
      * of payload. The payload will be wrapped in a BaseEvent
      * before published to any subscribers.
+     *
      * @param eventName
      * @param payload
      */

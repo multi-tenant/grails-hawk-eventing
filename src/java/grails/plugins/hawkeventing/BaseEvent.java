@@ -3,7 +3,6 @@ package grails.plugins.hawkeventing;
 import java.util.Date;
 
 /**
- * 
  * @author Kim A. Betti
  */
 public class BaseEvent implements Event {

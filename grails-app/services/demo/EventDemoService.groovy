@@ -7,12 +7,12 @@ import grails.plugins.hawkeventing.annotation.HawkEventConsumer
 @HawkEventConsumer
 class EventDemoService {
 
-	static transactional = false
+    static transactional = false
 
-	String latestBook
+    String latestBook
 
-	@Consuming("book.created")
-	def bookCreated(Event event) {
-		latestBook = event.getPayload()
-	}
+    @Consuming("book.created")
+    def bookCreated(Event event) {
+        latestBook = event.getPayload()
+    }
 }

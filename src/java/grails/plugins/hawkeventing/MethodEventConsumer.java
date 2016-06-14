@@ -8,11 +8,11 @@ import java.lang.reflect.Method;
 /**
  * Support publishing of events to specific method.
  * This is most likely configured by annotations.
- * 
+ * <p>
  * Note! It makes use of the reflection API so there
  * might be a slight performance trade of involved
  * with using this.
- * 
+ *
  * @author Kim A. Betti
  */
 public class MethodEventConsumer implements EventConsumer {
@@ -40,7 +40,7 @@ public class MethodEventConsumer implements EventConsumer {
 
     private void onReflectionException(Exception ex, Event event) {
         throw new EventException("Unable to notify " + consumer + " of "
-              + event.getEventName() + " because of reflection related exception", ex);
+                + event.getEventName() + " because of reflection related exception", ex);
     }
 
 }
